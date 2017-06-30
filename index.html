@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <title>FOB Mathhammer</title>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="main.css">
+  </head>
+
+  <body>
+    <script src="//cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script>
+
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="
+      crossorigin="anonymous"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+
+
+    <div class="form-group">
+      <label for="num-attacks">Number of attacks</label>
+      <input class="form-control" type="number" id="num-attacks" min="1" value="1">
+    </div>
+
+    <div class="form-group">
+      <label for="to-hit">To Hit roll</label>
+      <select class="form-control" id="tohit">
+        <option value="2">2+</option>
+        <option value="3" selected>3+</option>
+        <option value="4">4+</option>
+        <option value="5">5+</option>
+        <option value="6">6+</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="radio-inline">
+        <input type="radio" name="tohit-mod" id="tohit-mod-none" checked> No modifier
+      </label>
+
+      <label class="radio-inline">
+        <input type="radio" name="tohit-mod" id="tohit-mod-rerollones">
+        Re-roll 1s to hit
+      </label>
+
+      <label class="radio-inline">
+        <input type="radio" name="tohit-mod" id="tohit-mod-rerollall">
+        Re-roll to hit
+      </label>
+    </div>
+
+    <div class="form-group">
+      <label for="strength">Strength</label>
+      <select class="form-control" id="strength">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option selected>4</option>
+        <option>5</option>
+        <option>6</option>
+        <option>7</option>
+        <option>8</option>
+        <option>9</option>
+        <option>10</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="toughness">Toughness</label>
+      <select class="form-control" id="toughness">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option selected>4</option>
+        <option>5</option>
+        <option>6</option>
+        <option>7</option>
+        <option>8</option>
+        <option>9</option>
+        <option>10</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="radio-inline">
+        <input type="radio" name="towound-mod" id="towound-mod-none" checked> No modifier
+      </label>
+
+      <label class="radio-inline">
+        <input type="radio" name="towound-mod" id="towound-mod-rerollones">
+        Re-roll 1s to wound
+      </label>
+
+      <label class="radio-inline">
+        <input type="radio" name="towound-mod" id="towound-mod-rerollall">
+        Re-roll to wound
+      </label>
+    </div>
+
+    <div class="form-group">
+      <label for="armour">Armour Save</label>
+      <select class="form-control" id="armour">
+        <option value="2">2+</option>
+        <option value="3" selected>3+</option>
+        <option value="4">4+</option>
+        <option value="5">5+</option>
+        <option value="6">6+</option>
+        <option value="7">None</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="ap">AP</label>
+      <select class="form-control" id="ap">
+        <option>-4</option>
+        <option>-3</option>
+        <option>-2</option>
+        <option>-1</option>
+        <option selected>0</option>
+        <option>+1</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="invulnerable">Invulnerable Save</label>
+      <select class="form-control" id="invulnerable">
+        <option value="2">2+</option>
+        <option value="3">3+</option>
+        <option value="4">4+</option>
+        <option value="5">5+</option>
+        <option value="6">6+</option>
+        <option value="7" selected>None</option>
+      </select>
+    </div>
+
+
+    <div class="form-group form-inline">
+      <label class="radio-inline">
+        <input type="radio" name="damage" id="damage-fixed" checked> Fixed amount:
+      </label>
+      <input class="form-control" type="number" id="damage-num" min="1" max="6" value="1">
+      <label class="radio-inline">
+        <input type="radio" name="damage" id="damage-d3"> D3
+      </label>
+      <label class="radio-inline">
+        <input type="radio" name="damage" id="damage-d6"> D6
+      </label>
+      <label class="radio-inline">
+        <input type="radio" name="damage" id="damage-2d6"> 2D6
+      </label>
+    </div>
+
+    <div class="form-group form-inline">
+      <label class="radio-inline">
+        <input type="radio" name="special" id="special-4"> Disgustingly resilient (4+)
+      </label>
+      <label class="radio-inline">
+        <input type="radio" name="special" id="special-5"> Disgustingly resilient (5+)
+      </label>
+      <label class="radio-inline">
+        <input type="radio" name="special" id="special-6"> Warlord (6+)
+      </label>
+    </div>
+
+
+
+    <script>
+      console.log($("#ap").val())
+    </script>
+  </body>
+</html>
