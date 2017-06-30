@@ -16,7 +16,7 @@
       src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
       integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="
       crossorigin="anonymous"></script>
-    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://d3js.org/d3.v4.min.js"></script>
 
 
     <div class="form-group">
@@ -157,19 +157,6 @@
       </label>
     </div>
 
-    <b>Special Save</b>
-
-    <div class="form-group form-inline">
-      <label class="radio-inline">
-        <input type="radio" name="special" id="special-4"> Disgustingly resilient (4+)
-      </label>
-      <label class="radio-inline">
-        <input type="radio" name="special" id="special-5"> Disgustingly resilient (5+)
-      </label>
-      <label class="radio-inline">
-        <input type="radio" name="special" id="special-6"> Warlord (6+)
-      </label>
-    </div>
 
     <h4>Damage</h4>
 
@@ -177,7 +164,7 @@
       <label class="radio-inline">
         <input type="radio" name="damage" id="damage-fixed" checked> Fixed amount:
       </label>
-      <input class="form-control" type="number" id="damage-num" min="1" max="6" value="1">
+      <input class="form-control" type="number" id="damage-fixed-amount" min="1" max="6" value="1">
       <label class="radio-inline">
         <input type="radio" name="damage" id="damage-d3"> D3
       </label>
@@ -189,10 +176,183 @@
       </label>
     </div>
 
+    <h4>Abilities</h4>
 
+    <div class="form-group form-inline">
+      <label class="checkbox-inline">
+        <input type="checkbox" id="special-4"> Disgustingly resilient (4+)
+      </label>
+      <label class="checkbox-inline">
+        <input type="checkbox" id="special-5"> Disgustingly resilient (5+)
+      </label>
+      <label class="checkbox-inline">
+        <input type="checkbox" id="special-6"> Warlord (6+)
+      </label>
+    </div>
+
+    <svg width="960" height="500"></svg>
 
     <script>
-      console.log($("#ap").val())
+      var getprob = function(rollneeded, rerollall, rerollones) {
+        var prob = (7 - rollneeded) / 6;
+        if (rerollall) {
+          prob = prob + (1 - prob) * prob;
+        } else if (rerollones) {
+          prob = prob + (1 / 6) * prob;
+        }
+        return prob;
+      }
+
+      var gethitprob = function(tohit, tohit_rerollall, tohit_rerollones) {
+        return getprob(tohit, tohit_rerollall, tohit_rerollones);
+      }
+
+      var getwoundprob = function(strength, toughness, towound_rerollall,
+                                  towound_rerollones) {
+        var towound;
+        if (strength >= 2 * toughness) {
+          towound = 2;
+        } else if (strength > toughness) {
+          towound = 3;
+        } else if (strength == toughness) {
+          towound = 4;
+        } else if (strength <= toughness / 2) {
+          towound = 6;  // Out of order for predence over 5+
+        } else if (strength < toughness) {
+          towound = 5;
+        }
+        return getprob(towound, towound_rerollall, towound_rerollones);
+      }
+
+      var getInt = function(selector) {
+        return parseInt($(selector).val(), 10);
+      }
+      var getBool = function(selector) {
+        return $(selector).is(':checked');
+      }
+
+      function refreshdata() {
+
+        var numattacks = getInt('#num-attacks');
+
+        var tohit = getInt('#tohit');
+        var tohit_rerollall = getBool('#tohit-mod-rerollall');
+        var tohit_rerollones = getBool('#tohit-mod-rerollones');
+
+        var strength = getInt('#strength');
+        var toughness = getInt('#toughness');
+        var towound_rerollall = getBool('#towound-mod-rerollall');
+        var towound_rerollones = getBool('#towound-mod-rerollones');
+
+        var armour = getInt('#armour');
+        var ap = getInt('#ap');
+        var invulnerable = getInt('#invulnerable');
+        var invulnerable_rerollall = getBool('#invulnerable_rerollall');
+        var invulnerable_rerollones = getBool('#invulnerable_rerollones');
+
+        var damage_fixed = getBool('#damage-fixed');
+        var damage_fixed_amount = getInt('#damage-fixed-amount');
+        var damage_d3 = getBool('#damage-d3');
+        var damage_d6 = getBool('#damage-d6');
+        var damage_2d6 = getBool('#damage-2d6');
+
+        var special_4 = getBool('#special-4');
+        var special_5 = getBool('#special-5');
+        var special_6 = getBool('#special-6');
+
+        var hitprob = gethitprob(tohit, tohit_rerollall, tohit_rerollones);
+        var woundprob = getwoundprob(strength, toughness, towound_rerollall,
+                                     towound_rerollones);
+
+        var finalprob = hitprob * woundprob;
+
+        var data = [];
+        for (i = 0; i <= numattacks; i++) {
+          var frequency = jStat.binomial.pdf(i, numattacks, finalprob);
+          data.push({ frequency: frequency, letter: i })
+        }
+
+        update(data);
+      }
+
+      var svg = d3.select("svg"),
+          margin = {top: 20, right: 20, bottom: 30, left: 40},
+          width = +svg.attr("width") - margin.left - margin.right,
+          height = +svg.attr("height") - margin.top - margin.bottom;
+
+      var x = d3.scaleBand().rangeRound([0, width]).padding(0.1),
+          y = d3.scaleLinear().rangeRound([height, 0]);
+
+      var xAxis = d3.axisBottom(x);
+
+      var yAxis = d3.axisLeft(y).ticks(10, "%");
+
+      var g = svg.append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      g.append("g")
+          .attr("class", "axis axis--x")
+          .attr("transform", "translate(0," + height + ")")
+          .call(xAxis);
+
+      g.append("g")
+          .attr("class", "axis axis--y")
+          .call(yAxis)
+        .append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 6)
+          .attr("dy", "0.71em")
+          .attr("text-anchor", "end")
+          .text("Frequency");
+
+      function update(data) {
+        x.domain(data.map(function(d) { return d.letter; }));
+        y.domain([0, d3.max(data, function(d) { return d.frequency; })]);
+
+        g.select('.axis.axis--x').transition().duration(300).call(xAxis);
+        g.select(".axis.axis--y").transition().duration(300).call(yAxis);
+
+        var bars = g.selectAll(".bar").data(data, function(d) {
+            return d.letter;
+        })
+
+        // g.selectAll(".bar")
+        //   .data(data)
+        //   .enter().append("rect")
+        //     .attr("class", "bar")
+        //     .attr("x", function(d) { return x(d.letter); })
+        //     .attr("y", function(d) { return y(d.frequency); })
+        //     .attr("width", x.bandwidth())
+        //     .attr("height", function(d) { return height - y(d.frequency); });
+
+        // REMOVE
+        bars.exit()
+          .transition()
+            .duration(300)
+          .attr("y", y(0))
+          .attr("height", height - y(0))
+          .style('fill-opacity', 1e-6)
+          .remove();
+
+        // ENTER
+        bars.enter().append("rect")
+            .attr("class", "bar")
+            .attr("y", y(0))
+            .attr("height", height - y(0))
+        // UPDATE + ENTER
+          .merge(bars)
+            .transition()
+              .duration(300)
+            .attr("x", function(d) { return x(d.letter); })
+            .attr("width", x.bandwidth())
+            .attr("y", function(d) { return y(d.frequency); })
+            .attr("height", function(d) { return height - y(d.frequency); });
+      }
+
+      refreshdata();
+
+      $('input, select').change(refreshdata);
+
     </script>
   </body>
 </html>
