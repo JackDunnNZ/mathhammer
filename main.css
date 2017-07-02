@@ -16,3 +16,13 @@
   stroke: #000;
   shape-rendering: crispEdges;
 }
+
+.label {
+  fill: #fff;
+  font: 10px sans-serif;
+}
+
+.group-label {
+  padding-left: 0;
+  font-weight: 700;
+}
