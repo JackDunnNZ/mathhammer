@@ -12,7 +12,12 @@ function update(data) {
 
 
   // Update plot
-  data = data.filter(function(d) { return d.probability > 0.01; });
+  maxVisible = d3.max(data, function(d) {
+    return d.probability > 0.001 ? d.count : 0;
+  })
+  data = data.filter(function(d) {
+    return d.count <= maxVisible;
+  });
 
   var width = parseInt(d3.select('#chart').style('width'), 10);
   width = width - margin.left - margin.right;

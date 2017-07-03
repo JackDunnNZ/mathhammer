@@ -120,9 +120,30 @@
 }
 
 h1 {
-  text-align: center;
+  /* text-align: center; */
 }
 
 .results {
   font-weight: bold;
+}
+
+.banner-text {
+  position: absolute;
+  right: 50px;
+  bottom: 15px;
+  /* width: 100%; */
+}
+
+.banner-text span {
+   color: white;
+   font: bold 24px/45px Helvetica, Sans-Serif;
+   text-transform: uppercase;
+   background: rgb(0, 0, 0); /* fallback color */
+   background: rgba(0, 0, 0, 0.7);
+   border-radius: 4px;
+   padding: 10px;
+}
+.banner-container {
+  position: relative;
+  width: 100%;
 }
