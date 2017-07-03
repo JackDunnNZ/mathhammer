@@ -10,211 +10,278 @@
   </head>
 
   <body>
-    <div class="form-group">
-      <label for="num-attacks">Number of attacks</label>
-      <input class="form-control" type="number" id="num-attacks" min="1" value="10">
+    <div class="container">
+      <div class="row">
+
+        <div class="col-md-4" id="settings-col">
+          <div class="settings">
+            <div class="form-group form-horizontal">
+              <label class="control-label autosize-label" for="num-attacks">Number of attacks</label>
+              <span class="autosize-container">
+                <input class="form-control" type="number" id="num-attacks" min="1" value="10">
+              </span>
+            </div>
+          </div>
+
+          <div class="settings">
+            <h4>Hitting</h4>
+
+            <div class="form-group form-horizontal clearfix">
+              <div class="col-xs-6">
+                <label class="control-label autosize-label" for="tohit">To Hit</label>
+                <span class="autosize-container">
+                  <select class="form-control" id="tohit">
+                    <option value="2">2+</option>
+                    <option value="3" selected>3+</option>
+                    <option value="4">4+</option>
+                    <option value="5">5+</option>
+                    <option value="6">6+</option>
+                  </select>
+                </span>
+              </div>
+
+              <div class="col-xs-6">
+                <label class="control-label autosize-label" for="tohit-mod">Modifier</label>
+                <span class="autosize-container">
+                  <select class="form-control" id="tohit-mod">
+                    <option>-4</option>
+                    <option>-3</option>
+                    <option>-2</option>
+                    <option>-1</option>
+                    <option value="0" selected>None</option>
+                    <option>+1</option>
+                    <option>+2</option>
+                    <option>+3</option>
+                    <option>+4</option>
+                  </select>
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="radio-inline group-label">Re-rolls:</label>
+              <label class="radio-inline">
+                <input type="radio" name="tohit-reroll" id="tohit-reroll-none" checked> None
+              </label>
+
+              <label class="radio-inline">
+                <input type="radio" name="tohit-reroll" id="tohit-reroll-ones">
+                Ones
+              </label>
+
+              <label class="radio-inline">
+                <input type="radio" name="tohit-reroll" id="tohit-reroll-all">
+                All
+              </label>
+            </div>
+          </div>
+
+          <div class="settings">
+            <h4>Wounding</h4>
+
+            <div class="form-group form-horizontal clearfix">
+              <div class="col-xs-3">
+                <label class="control-label autosize-label" for="strength">S</label>
+                <span class="autosize-container">
+                  <select class="form-control" id="strength">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option selected>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>10</option>
+                  </select>
+                </span>
+
+              </div>
+
+              <div class="col-xs-3">
+                <label class="control-label autosize-label" for="toughness">T</label>
+                <span class="autosize-container">
+                  <select class="form-control" id="toughness">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option selected>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>10</option>
+                  </select>
+                </span>
+              </div>
+              <div class="col-xs-6">
+                <label class="control-label autosize-label" for="towound-mod">Modifier</label>
+                <span class="autosize-container">
+                  <select class="form-control" id="towound-mod">
+                    <option>-4</option>
+                    <option>-3</option>
+                    <option>-2</option>
+                    <option>-1</option>
+                    <option value="0" selected>None</option>
+                    <option>+1</option>
+                    <option>+2</option>
+                    <option>+3</option>
+                    <option>+4</option>
+                  </select>
+                </span>
+              </div>
+            </div>
+
+
+            <div class="form-group">
+              <label class="radio-inline group-label">Re-rolls:</label>
+              <label class="radio-inline">
+                <input type="radio" name="towound-reroll" id="towound-reroll-none" checked> None
+              </label>
+
+              <label class="radio-inline">
+                <input type="radio" name="towound-reroll" id="towound-reroll-ones">
+                Ones
+              </label>
+
+              <label class="radio-inline">
+                <input type="radio" name="towound-reroll" id="towound-reroll-all">
+                All
+              </label>
+            </div>
+          </div>
+
+          <div class="settings">
+            <h4>Saves</h4>
+
+            <div class="form-group form-horizontal clearfix">
+              <div class="col-xs-8">
+                <label class="control-label autosize-label" for="armour">Armour Save</label>
+                <span class="autosize-container">
+                  <select class="form-control" id="armour">
+                    <option value="2">2+</option>
+                    <option value="3" selected>3+</option>
+                    <option value="4">4+</option>
+                    <option value="5">5+</option>
+                    <option value="6">6+</option>
+                    <option value="7">None</option>
+                  </select>
+                </span>
+              </div>
+
+              <div class="col-xs-4">
+                <label class="control-label autosize-label" for="ap">AP</label>
+                <span class="autosize-container">
+                  <select class="form-control" id="ap">
+                    <option>-4</option>
+                    <option>-3</option>
+                    <option>-2</option>
+                    <option>-1</option>
+                    <option selected>0</option>
+                    <option>+1</option>
+                  </select>
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group form-horizontal clearfix">
+              <div class="col-xs-12">
+                <label class="control-label autosize-label" for="invulnerable">Invulnerable Save</label>
+                <span class="autosize-container">
+                  <select class="form-control" id="invulnerable">
+                    <option value="2">2+</option>
+                    <option value="3">3+</option>
+                    <option value="4">4+</option>
+                    <option value="5">5+</option>
+                    <option value="6">6+</option>
+                    <option value="7" selected>None</option>
+                  </select>
+                </span>
+              </div>
+            </div>
+
+
+            <div class="form-group invulnerable-reroll">
+              <label class="radio-inline group-label">Invulnerable save re-rolls:</label>
+
+              <label class="radio-inline">
+                <input type="radio" name="invulnerable-reroll" id="invulnerable-reroll-none" checked> None
+              </label>
+              <label class="radio-inline">
+                <input type="radio" name="invulnerable-reroll" id="invulnerable-reroll-ones">
+                Ones
+              </label>
+              <label class="radio-inline">
+                <input type="radio" name="invulnerable-reroll" id="invulnerable-reroll-all">
+                All
+              </label>
+            </div>
+          </div>
+
+          <div class="settings">
+            <h4>Damage</h4>
+
+            <div id="damage-container" class="form-group form-horizontal">
+              <div id="damage-col-1">
+                <label class="radio-inline control-label" id="damage-fixed-label">
+                  <input type="radio" name="damage" id="damage-fixed" checked> Fixed amount:
+                </label>
+                <input class="form-control" type="number" id="damage-fixed-amount" min="1" max="6" value="1">
+              </div>
+              <div id="damage-col-2">
+                <label class="radio-inline">
+                  <input type="radio" name="damage" id="damage-d3"> D3
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" name="damage" id="damage-d6"> D6
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" name="damage" id="damage-2d6"> 2D6
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings">
+            <h4>Special Saves</h4>
+
+            <div class="form-group form-horizontal clearfix">
+              <div class="col-sm-4 col-md-12">
+                <label class="checkbox-inline">
+                  <input type="checkbox" id="special-4"> 4+ (e.g. Disgustingly Resilient)
+                </label>
+              </div>
+              <div class="col-sm-4 col-md-12">
+                <label class="checkbox-inline">
+                  <input type="checkbox" id="special-5"> 5+ (e.g. Disgustingly Resilient)
+                </label>
+              </div>
+              <div class="col-sm-4 col-md-12">
+                <label class="checkbox-inline">
+                  <input type="checkbox" id="special-6"> 6+ (e.g. Tenacious Survivor)
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-8">
+          <h1>Fields of Blood Mathhammer</h1>
+          <div id="chart">
+            <svg></svg>
+          </div>
+          <div>
+            <h4>Results</h4>
+            <ul>
+              <li>Average number of wounds: <span id="results-average" class="results"></span></li>
+              <li>Standard deviation in number of wounds: <span id="results-std" class="results"></span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <h4>Hitting</h4>
-
-    <div class="form-group">
-      <label for="tohit">To Hit roll</label>
-      <select class="form-control" id="tohit">
-        <option value="2">2+</option>
-        <option value="3" selected>3+</option>
-        <option value="4">4+</option>
-        <option value="5">5+</option>
-        <option value="6">6+</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label for="tohit-mod">To Hit modifier</label>
-      <select class="form-control" id="tohit-mod">
-        <option>-4</option>
-        <option>-3</option>
-        <option>-2</option>
-        <option>-1</option>
-        <option value="0" selected>None</option>
-        <option>+1</option>
-        <option>+2</option>
-        <option>+3</option>
-        <option>+4</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label class="radio-inline group-label">Re-rolls:</label>
-      <label class="radio-inline">
-        <input type="radio" name="tohit-reroll" id="tohit-reroll-none" checked> None
-      </label>
-
-      <label class="radio-inline">
-        <input type="radio" name="tohit-reroll" id="tohit-reroll-ones">
-        Re-roll 1s to hit
-      </label>
-
-      <label class="radio-inline">
-        <input type="radio" name="tohit-reroll" id="tohit-reroll-all">
-        Re-roll to hit
-      </label>
-    </div>
-
-    <h4>Wounding</h4>
-
-    <div class="form-group">
-      <label for="strength">Strength</label>
-      <select class="form-control" id="strength">
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
-        <option selected>4</option>
-        <option>5</option>
-        <option>6</option>
-        <option>7</option>
-        <option>8</option>
-        <option>9</option>
-        <option>10</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label for="toughness">Toughness</label>
-      <select class="form-control" id="toughness">
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
-        <option selected>4</option>
-        <option>5</option>
-        <option>6</option>
-        <option>7</option>
-        <option>8</option>
-        <option>9</option>
-        <option>10</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label for="towound-mod">To Wound modifier</label>
-      <select class="form-control" id="towound-mod">
-        <option>-4</option>
-        <option>-3</option>
-        <option>-2</option>
-        <option>-1</option>
-        <option value="0" selected>None</option>
-        <option>+1</option>
-        <option>+2</option>
-        <option>+3</option>
-        <option>+4</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label class="radio-inline group-label">Re-rolls:</label>
-      <label class="radio-inline">
-        <input type="radio" name="towound-reroll" id="towound-reroll-none" checked> None
-      </label>
-
-      <label class="radio-inline">
-        <input type="radio" name="towound-reroll" id="towound-reroll-ones">
-        Re-roll 1s to wound
-      </label>
-
-      <label class="radio-inline">
-        <input type="radio" name="towound-reroll" id="towound-reroll-all">
-        Re-roll to wound
-      </label>
-    </div>
-
-    <h4>Saves</h4>
-
-    <div class="form-group">
-      <label for="armour">Armour Save</label>
-      <select class="form-control" id="armour">
-        <option value="2">2+</option>
-        <option value="3" selected>3+</option>
-        <option value="4">4+</option>
-        <option value="5">5+</option>
-        <option value="6">6+</option>
-        <option value="7">None</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label for="ap">AP</label>
-      <select class="form-control" id="ap">
-        <option>-4</option>
-        <option>-3</option>
-        <option>-2</option>
-        <option>-1</option>
-        <option selected>0</option>
-        <option>+1</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label for="invulnerable">Invulnerable Save</label>
-      <select class="form-control" id="invulnerable">
-        <option value="2">2+</option>
-        <option value="3">3+</option>
-        <option value="4">4+</option>
-        <option value="5">5+</option>
-        <option value="6">6+</option>
-        <option value="7" selected>None</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label class="radio-inline group-label">Re-rolls:</label>
-      <label class="radio-inline">
-        <input type="radio" name="invulnerable-reroll" id="invulnerable-reroll-none" checked> None
-      </label>
-
-      <label class="radio-inline">
-        <input type="radio" name="invulnerable-reroll" id="invulnerable-reroll-ones">
-        Re-roll invulnerable saves of 1
-      </label>
-
-      <label class="radio-inline">
-        <input type="radio" name="invulnerable-reroll" id="invulnerable-reroll-all">
-        Re-roll failed invulnerable saves
-      </label>
-    </div>
-
-
-    <h4>Damage</h4>
-
-    <div class="form-group form-inline">
-      <label class="radio-inline">
-        <input type="radio" name="damage" id="damage-fixed" checked> Fixed amount:
-      </label>
-      <input class="form-control" type="number" id="damage-fixed-amount" min="1" max="6" value="1">
-      <label class="radio-inline">
-        <input type="radio" name="damage" id="damage-d3"> D3
-      </label>
-      <label class="radio-inline">
-        <input type="radio" name="damage" id="damage-d6"> D6
-      </label>
-      <label class="radio-inline">
-        <input type="radio" name="damage" id="damage-2d6"> 2D6
-      </label>
-    </div>
-
-    <h4>Special Saves</h4>
-
-    <div class="form-group form-inline">
-      <label class="checkbox-inline">
-        <input type="checkbox" id="special-4"> 4+ (e.g. Disgustingly Resilient)
-      </label>
-      <label class="checkbox-inline">
-        <input type="checkbox" id="special-5"> 5+ (e.g. Disgustingly Resilient)
-      </label>
-      <label class="checkbox-inline">
-        <input type="checkbox" id="special-6"> 6+ (e.g. Tenacious Survivor)
-      </label>
-    </div>
-
-    <svg width="960" height="500"></svg>
 
 
     <script src="//cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script>
