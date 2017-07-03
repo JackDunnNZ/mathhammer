@@ -44,13 +44,16 @@ function getsaveprob(armour, ap, invulnerable, invulnerable_rerollall,
   return 1 - Math.max(armourprob, invulnerableprob);
 }
 
-function getspecialprob(special_4, special_5, special_6) {
+function getspecialprob(special_4, special_5, special_5_ones, special_6) {
   var prob = 1;
   if (special_4) {
     prob *= 1 / 2;
   }
   if (special_5) {
     prob *= 2 / 3;
+  }
+  if (special_5_ones) {
+    prob *= 11 / 18;;
   }
   if (special_6) {
     prob *= 5 / 6;
@@ -158,6 +161,7 @@ function getdata() {
 
   var special_4 = getBool('#special-4');
   var special_5 = getBool('#special-5');
+  var special_5_ones = getBool('#special-5-ones');
   var special_6 = getBool('#special-6');
 
   var hitprob = gethitprob(tohit, tohit_mod, tohit_rerollall,
@@ -175,7 +179,8 @@ function getdata() {
                            damage_fixed_amount, damage_d3, damage_d6,
                            damage_2d6);
 
-  var specialprob = getspecialprob(special_4, special_5, special_6);
+  var specialprob = getspecialprob(special_4, special_5, special_5_ones,
+                                   special_6);
 
   var finalDamage = getfinaldamage(damages, specialprob);
 
