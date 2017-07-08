@@ -61,6 +61,15 @@ function update(data) {
       .attr("class", "bar")
       .attr("y", y(0))
       .attr("height", height - y(0))
+      .on("mousemove", function(d) {
+        var woundText = d.count == 1 ? " wound:" : " wounds:";
+        var text = "Probability of doing<br>at least " + d.count + woundText;
+        text = "<b>" + text + "</b>";
+        text += "<br>";
+        text += (d.total_probability * 100).toFixed(1) + "%";
+        showTooltip(text);
+      })
+      .on("mouseout", hideTooltip)
   // UPDATE + ENTER
     .merge(bars)
       .transition()
@@ -108,7 +117,22 @@ function refreshdata() {
   update(getdata());
 }
 
+function showTooltip(text) {
+  tooltip.style("left", (d3.event.pageX + 10) + "px");
+  tooltip.style("top", (d3.event.pageY - 25) + "px");
+  tooltip.style("display", "inline-block");
+  tooltip.html(text);;
+}
+
+function hideTooltip(d) {
+  tooltip.style("display", "none");
+}
+
 var margin = {top: 20, right: 20, bottom: 30, left: 50};
+
+var tooltip = d3.select("body")
+  .append("div")
+    .attr("class", "toolTip");
 
 var svg = d3.select("#chart svg")
 

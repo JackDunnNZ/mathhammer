@@ -186,9 +186,16 @@ function getdata() {
 
   var data = [];
   var maxFinalDamage = Math.max.apply(null, Object.keys(damages));
+
+  var totalProb = 1;
   for (i = 0; i <= maxFinalDamage; i++) {
     var probability = finalDamage[i] || 0;
-    data.push({ probability: probability, count: i })
+    data.push({
+        probability: probability,
+        total_probability: totalProb,
+        count: i
+    })
+    totalProb -= probability;
   }
 
   return data;
