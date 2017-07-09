@@ -97,6 +97,24 @@ function simulate(numdamage, sides) {
   return sums;
 }
 
+function simulateBestOf2(numdamage, sides) {
+  var sums = []
+  for (i = 0; i < SIMLULATION_ITERS; i++) {
+    total = 0;
+    for (damage = 0; damage < numdamage; damage++) {
+      roll1 = Math.floor(Math.random() * sides) + 1;
+      roll2 = Math.floor(Math.random() * sides) + 1;
+      total += Math.max(roll1, roll2);
+    }
+    sums[total] = 1 + (sums[total] || 0);
+  }
+
+  for (i = 0; i < sums.length; i++) {
+    sums[i] = sums[i] / SIMLULATION_ITERS || 0;
+  }
+  return sums;
+}
+
 function getnumattacks(numattacks, attack_1, attack_d3, attack_d6) {
   if (attack_1) {
     return [{ prob: 1, numattacks: numattacks }];
@@ -129,7 +147,7 @@ function getdamagerolls(numattackrolls, damageprob) {
 }
 
 function getdamages(damagerolls, damage_fixed, damage_fixed_amount, damage_d3,
-                    damage_d6, damage_2d6) {
+                    damage_d6, damage_2d6, damage_best2d6) {
   var damages = {}
   for (var damageroll in damagerolls) {
     var prob = damagerolls[damageroll]
@@ -143,6 +161,8 @@ function getdamages(damagerolls, damage_fixed, damage_fixed_amount, damage_d3,
         dist = simulate(damageroll, 6);
       } else if (damage_2d6) {
         dist = simulate(damageroll * 2, 6);
+      } else if (damage_best2d6) {
+        dist = simulateBestOf2(damageroll, 6)
       }
       for (var damage = 0; damage < dist.length; damage++) {
         setDamage(damages, damage, prob * dist[damage]);
@@ -196,6 +216,7 @@ function getdata() {
   var damage_d3 = getBool('#damage-d3');
   var damage_d6 = getBool('#damage-d6');
   var damage_2d6 = getBool('#damage-2d6');
+  var damage_best2d6 = getBool('#damage-best2d6');
 
   var special_4 = getBool('#special-4');
   var special_5 = getBool('#special-5');
@@ -225,7 +246,7 @@ function getdata() {
 
   // Distribution of number of wounds after multiplying out damage
   var alldamages = getdamages(damagerolls, damage_fixed, damage_fixed_amount,
-                              damage_d3, damage_d6, damage_2d6)
+                              damage_d3, damage_d6, damage_2d6, damage_best2d6)
 
   // Distribution of wounds after special saves
   var finalDamage = getfinaldamage(alldamages, specialprob);
