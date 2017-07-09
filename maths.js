@@ -75,7 +75,7 @@ function setDamage(damages, damage, probability) {
   damages[damage] += probability;
 }
 
-var SIMLULATION_ITERS = 100000;
+var SIMLULATION_ITERS = 10000;
 function simulate(numdamage, sides) {
   var sums = []
   for (i = 0; i < SIMLULATION_ITERS; i++) {
@@ -92,25 +92,55 @@ function simulate(numdamage, sides) {
   return sums;
 }
 
-function getdamages(numattacks, finalprob, damage_fixed,
-                    damage_fixed_amount, damage_d3, damage_d6,
-                    damage_2d6) {
+function getnumattacks(numattacks, attack_1, attack_d3, attack_d6) {
+  if (attack_1) {
+    return [{ prob: 1, numattacks: numattacks }];
+  } else {
+    var dist;
+    if (attack_d3) {
+      dist = simulate(numattacks, 3);
+    } else if (attack_d6) {
+      dist = simulate(numattacks, 6);
+    }
+    var out = [];
+    for (var i = 0; i < dist.length; i++) {
+      if (dist[i] > 0) {
+        out.push({ prob: dist[i], numattacks: i })
+      }
+    }
+    return out;
+  }
+}
+
+function getdamagerolls(numattackrolls, damageprob) {
+  var damagerolls = {};
+  numattackrolls.forEach(function(d) {
+    for (var i = 0; i <= d.numattacks; i++) {
+      var probability = jStat.binomial.pdf(i, d.numattacks, damageprob);
+      damagerolls[i] = d.prob * probability + (damagerolls[i] || 0)
+    }
+  })
+  return damagerolls;
+}
+
+function getdamages(damagerolls, damage_fixed, damage_fixed_amount, damage_d3,
+                    damage_d6, damage_2d6) {
   var damages = {}
-  for (var i = 0; i <= numattacks; i++) {
-    var probability = jStat.binomial.pdf(i, numattacks, finalprob);
+  for (var damageroll in damagerolls) {
+    var prob = damagerolls[damageroll]
     if (damage_fixed) {
-      setDamage(damages, i * damage_fixed_amount, probability);
+      setDamage(damages, damageroll * damage_fixed_amount, prob);
     } else {
       var dist;
       if (damage_d3) {
-        dist = simulate(i, 3);
+        dist = simulate(damageroll, 3);
       } else if (damage_d6) {
-        dist = simulate(i, 6);
+        dist = simulate(damageroll, 6);
       } else if (damage_2d6) {
-        dist = simulate(i * 2, 6);
+        dist = simulate(damageroll * 2, 6);
       }
       for (var damage = 0; damage < dist.length; damage++) {
-        setDamage(damages, damage, probability * dist[damage]);
+        setDamage(damages, damage, prob * dist[damage]);
       }
     }
   }
@@ -122,7 +152,7 @@ function getfinaldamage(damages, specialprob) {
   var finalDamage = {};
   for (damage = 0; damage <= maxDamage; damage++) {
     for (i = 0; i <= damage; i++) {
-      var damageProb = damages[damage] || 0;;
+      var damageProb = damages[damage] || 0;
       if (damageProb > 0) {
         var probability = jStat.binomial.pdf(i, damage, specialprob);
         setDamage(finalDamage, i, damageProb * probability);
@@ -135,6 +165,9 @@ function getfinaldamage(damages, specialprob) {
 function getdata() {
 
   var numattacks = getInt('#num-attacks');
+  var attack_1 = getBool("#attack-1");
+  var attack_d3 = getBool("#attack-d3");
+  var attack_d6 = getBool("#attack-d6");
 
   var tohit = getInt('#tohit');
   var tohit_mod = getInt('#tohit-mod');
@@ -164,28 +197,36 @@ function getdata() {
   var special_5_ones = getBool('#special-5-ones');
   var special_6 = getBool('#special-6');
 
+  // Basic hit/wound/save probs
   var hitprob = gethitprob(tohit, tohit_mod, tohit_rerollall,
                            tohit_rerollones);
   var woundprob = getwoundprob(strength, toughness, towound_mod,
                                towound_rerollall, towound_rerollones);
-
   var saveprob = getsaveprob(armour, ap, invulnerable,
                              invulnerable_rerollall,
                              invulnerable_rerollones)
 
-  var finalprob = hitprob * woundprob * saveprob;
-
-  var damages = getdamages(numattacks, finalprob, damage_fixed,
-                           damage_fixed_amount, damage_d3, damage_d6,
-                           damage_2d6);
-
+  // Probability of an attack hitting/wounding/failing save
+  var damageprob = hitprob * woundprob * saveprob;
+  // Probability of wound passing through special saves
   var specialprob = getspecialprob(special_4, special_5, special_5_ones,
                                    special_6);
 
-  var finalDamage = getfinaldamage(damages, specialprob);
+  // Distribution of number of attacks
+  var numattackrolls = getnumattacks(numattacks, attack_1, attack_d3, attack_d6)
+
+  // Distribution of number of attacks that make it to damage rolls
+  var damagerolls = getdamagerolls(numattackrolls, damageprob)
+
+  // Distribution of number of wounds after multiplying out damage
+  var alldamages = getdamages(damagerolls, damage_fixed, damage_fixed_amount,
+                              damage_d3, damage_d6, damage_2d6)
+
+  // Distribution of wounds after special saves
+  var finalDamage = getfinaldamage(alldamages, specialprob);
 
   var data = [];
-  var maxFinalDamage = Math.max.apply(null, Object.keys(damages));
+  var maxFinalDamage = Math.max.apply(null, Object.keys(finalDamage));
 
   var totalProb = 1;
   for (i = 0; i <= maxFinalDamage; i++) {
