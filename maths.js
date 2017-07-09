@@ -1,4 +1,9 @@
 function getprob(rollneeded, rollmod, rerollall, rerollones) {
+  // Check for auto-success
+  if (rollneeded == 0) {
+    return 1;
+  }
+
   var prob = (7 - rollneeded) / 6;
   var mod = rollmod / 6;
   var prob_neg = Math.max(prob + Math.min(mod, 0), 0);
